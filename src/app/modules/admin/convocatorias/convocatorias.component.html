@@ -1,0 +1,120 @@
+<div class="card-titulo p-3">
+    <h4 class="mb-0">Convocatorias vigentes</h4>
+    <p class="m-0">Listado de convocatorias</p>
+</div>
+<div class="p-3">
+    <form [formGroup]="myform" autocomplete="off" style="display: contents;" spellcheck="true">
+        <div class="row">
+            <div class="col-12 col-sm-4 mb-3 mb-sm-0">
+                <div class="mb-2 d-flex">
+                    <button mat-mini-fab aria-label="Actualizar"
+                        (click)="listar()"
+                        matTooltip="Actualizar">
+                        <mat-icon>refresh</mat-icon>
+                    </button>
+                    <button class="ms-2" mat-mini-fab aria-label="Sincron"
+                        (click)="sincronizar('5ms', '0ms')"
+                        matTooltip="Sincronizar" [disabled]="sincronizando">
+                        <mat-icon>sync_alt</mat-icon>
+                    </button>
+                    @if (sincronizando){
+                    <mat-progress-spinner  
+                        class="ms-2 mt-1"
+                        mode="indeterminate"
+                        diameter="30">
+                    </mat-progress-spinner>
+                    <div class="ms-1 pt-2">Sincronizando...</div>
+                    }
+                </div>
+            </div>
+            <div class="col-12 col-sm-3">
+                <mat-form-field style="display: flex;"  appearance="outline">
+                    <mat-label>Profesión / Carrera</mat-label>
+                    <mat-select formControlName="carrera_id" (ngModelChange)="changeSelect($event)">
+                        <mat-option class="select-min" [value]="'T'">Todas</mat-option>
+                        @for (p of carreras$ | async; track $index) {
+                        <mat-option class="select-min" [value]="p.id">{{ p.nombre }}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-12 col-sm-2">
+                <div style="padding-left: 2px;">
+                    <mat-form-field style="display: flex;" appearance="outline">
+                        <mat-label>Sueldo</mat-label>
+                        <mat-select formControlName="sueldo" (ngModelChange)="changeSelect($event)">
+                            <mat-option class="select-min" [value]="'T'">Todos</mat-option>
+                            @for (p of sueldos; track $index) {
+                            <mat-option class="select-min" [value]="p.id">{{ p.nombre }}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="col-12 col-sm-3">
+                <div style="padding-left: 2px;">
+                    <mat-form-field style="display: flex;" appearance="outline" floatLabel="always">
+                        <mat-label>Buscar por entidad o cargo</mat-label>
+                        <input matInput formControlName="search" (keyup)="listarTime($event)">
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+    </form>
+    <mat-progress-bar mode="indeterminate" *ngIf="!cargado"></mat-progress-bar>
+    <div class="table-responsive">
+        <table class="basic table-bordered table-color txt-12" width="100%">
+            <thead>
+                <tr class="bg-eee">
+                    <th [width]="25">#</th>
+                    <th>Carrera</th>
+                    <th [width]="50">Logo</th>
+                    <th>Entidad</th>
+                    <th>Cargo</th>
+                    <th>Sueldo</th>
+                    <th [width]="65">Fecha</th>
+                    <!-- <th [width]="60">Vigente</th> -->
+                    <th>Lugar</th>
+                    <th [width]="50">Ver más</th>
+                </tr>
+            </thead>
+            <tbody>
+            @for (p of convocatorias$ | async; track $index) {
+                <tr class="tr_color_yellow">
+                    <td align="center">{{$index+1}}</td>
+                    <td>{{p.carrera_nombre}}</td>
+                    <td align="center">
+                        @defer(){
+                        <img [src]="p.entidad_logo_url" class="logo-entidad">
+                        } @placeholder {
+                        <img src="logo-entidad.png" class="logo-entidad">
+                        }
+                    </td>
+                    <td>{{p.entidad_nombre}} @if (p.entidad_nombre != p.entidad_siglas) { ({{p.entidad_siglas}}) }</td>
+                    <td>{{p.cargo}}</td>
+                    <td align="right">{{p.sueldo|number}}</td>
+                    <td align="center">{{p.fecha| date:'dd/MM/yyyy'}}</td>
+                    <!-- <td align="center">
+                        @if (p.vigente) {SI}
+                    </td> -->
+                    <td>{{p.lugar_nombre}}</td>
+                    <td align="center">
+                        <a (click)="verMas(p)" class="an-link">Ver más</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="pagination$ | async as pagination">
+        <mat-paginator 
+              [length]="pagination.total"
+              [pageSize]="pagination.page_size"
+              pageIndex="{{pagination.current_page-1}}"
+              [pageSizeOptions]="[2, 4, 10, 25, 100, 500, 1000,2000]"
+              (page)="changePage($event)"
+              showFirstLastButtons
+              aria-label="Select page">
+        </mat-paginator>
+    </div>
+</div>

@@ -1,0 +1,115 @@
+<mat-progress-bar style="position: fixed;" mode="indeterminate" *ngIf="!cargado"></mat-progress-bar>
+<div class="buscador">
+  <div class="container">
+      <div class="titulo">
+          <div class="pt-2"><img src="logo-buscador.png" class="logo-buscador"></div>
+          <div class="ms-1" id="titulo"><b>Convocatorias</b> de trabajo</div>
+      </div>
+      <form [formGroup]="myform" autocomplete="off" style="display: contents;" spellcheck="true">
+          <div class="row">
+              <div class="col-12 col-sm-6 col-lg-3">
+                  <mat-form-field style="width: 97%;"  appearance="outline">
+                      <mat-label>Profesión / Carrera</mat-label>
+                      <mat-select formControlName="carrera_id" (ngModelChange)="changeSelect($event)">
+                          <mat-option class="select-min" [value]="'T'">Todas</mat-option>
+                          @for (p of carreras$ | async; track $index) {
+                          <mat-option class="select-min" [value]="p.id">{{ p.nombre }}</mat-option>
+                          }
+                      </mat-select>
+                  </mat-form-field>
+              </div>
+              <div class="col-12 col-sm-6 col-lg-2">
+                  <div>
+                      <mat-form-field style="width: 97%;" appearance="outline">
+                          <mat-label>Sueldo</mat-label>
+                          <mat-select formControlName="sueldo_" (ngModelChange)="changeSelect($event)">
+                              <mat-option class="select-min" [value]="'T'">Todos</mat-option>
+                               @for (p of sueldos; track $index) {
+                              <mat-option class="select-min" [value]="p.id">{{ p.nombre }}</mat-option>
+                              }
+                          </mat-select>
+                      </mat-form-field>
+                  </div>
+              </div>
+              <div class="col-12 col-sm-12 col-lg-4">
+                  <div>
+                      <mat-form-field style="width: 97%;" appearance="outline" floatLabel="always">
+                          <mat-label>Buscar por entidad o cargo</mat-label>
+                          <input matInput formControlName="search" (keyup)="listarTime($event)">
+                      </mat-form-field>
+                  </div>
+              </div>
+          </div>
+      </form>
+    </div>
+</div>
+<div class="container pt-2 pb-2">
+    @defer(){
+    <div class="row">
+      @for (p of convocatorias$ | async; track $index) {
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-4">
+        <div class="p-1">
+          <mat-card appearance="outlined">
+            <mat-card-content>
+              <div class="d-flex">
+                @defer(){
+                  <img [src]="p.entidad_logo_url" class="logo-entidad-2 logo-border">
+                  } @placeholder {
+                  <img src="logo-entidad.png" class="logo-entidad-2 logo-border">
+                  }
+                  <div class="ps-2 lh-15">
+                    <div class="txt-13">{{p.entidad_nombre}} @if (p.entidad_nombre != p.entidad_siglas) { ({{p.entidad_siglas}}) }</div>
+                    <div class="txt-12 color-gris">{{p.carrera_nombre}} - {{p.lugar_nombre}}</div>
+                  </div>
+              </div>
+              <div class="pt-1 txt-13 lh-15">
+                <div><a (click)="verMas(p)" class="an-link">{{p.nro}}</a></div>
+                <div>Finaliza: {{p.fecha| date:'dd/MM/yyyy'}}</div>
+                <div>Sueldo: {{p.sueldo|number}}</div>
+                <div>Cargo: {{p.cargo}}</div>
+                <div class="txt-10">Grado: {{p.grado}}</div>
+                <div class="mt-1">
+                  <button 
+                    (click)="verDetalle(p.id)"
+                    class="btn-detalle"
+                    mat-stroked-button
+                    matTooltip="Ver detalle de la convocatoria">Ver detalle</button>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+      }
+    </div>
+    } @placeholder {
+    <div class="text-center">Cargando datos...</div>
+    }@error {
+      <span>Error al cargar :(</span>
+    }
+
+    @defer(){
+      <div class="row">
+        <div class="col-12 col-sm-4">
+          <div class="txt-12">{{buscado_text()}}</div>
+        </div>
+        <div class="col-12 col-sm-8" *ngIf="pagination$ | async as pagination">
+          <mat-paginator 
+                class="bg-transparent"
+                [length]="pagination.total"
+                [pageSize]="pagination.page_size"
+                pageIndex="{{pagination.current_page-1}}"
+                [pageSizeOptions]="[3, 6, 9, 18, 30, 100, 500, 1000,2000]"
+                (page)="changePage($event)"
+                showFirstLastButtons
+                aria-label="Select page">
+          </mat-paginator>
+        </div>
+      </div>
+    
+    } @placeholder {
+    <div class="txt-11">Cargando paginación...</div>
+    }@error {
+      <span>Error al cargar :(</span>
+    }
+</div>

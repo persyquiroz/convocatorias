@@ -1,0 +1,47 @@
+<div class="card-titulo p-3">
+    <h4 class="mb-0">Carreras</h4>
+    <p class="m-0">Listado de carreras o profesiones</p>
+</div>
+<div class="p-3">
+    <mat-progress-bar mode="indeterminate" *ngIf="!cargado"></mat-progress-bar>
+    <div class="table-responsive">
+        <table class="basic table-bordered table-color" width="100%">
+            <thead>
+                <tr class="bg-eee">
+                    <th [width]="25">#</th>
+                    <th>Nombre</th>
+                    <th>Nombre plural</th>
+                    <th>Siglas</th>
+                    <th>Ruta</th>
+                    <th [width]="60">Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+            @for (p of carreras$ | async; track $index) {
+                <tr class="tr_color_yellow">
+                    <td align="center">{{$index+1}}</td>
+                    <td>{{p.nombre}}</td>
+                    <td>{{p.nombre_plural}}</td>
+                    <td>{{p.siglas}}</td>
+                    <td>{{p.ruta_scraping}}</td>
+                    <td align="center">
+                        @if (p.estado) {Activo} 
+                        @else {Desactivo}
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="pagination$ | async as pagination">
+        <mat-paginator 
+              [length]="pagination.total"
+              [pageSize]="pagination.page_size"
+              pageIndex="{{pagination.current_page-1}}"
+              [pageSizeOptions]="[2, 4, 10, 25, 100]"
+              (page)="changePage($event)"
+              showFirstLastButtons
+              aria-label="Select page">
+    </mat-paginator>
+    </div>
+</div>

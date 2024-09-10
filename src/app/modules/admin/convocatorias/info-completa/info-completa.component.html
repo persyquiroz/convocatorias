@@ -1,0 +1,15 @@
+
+<!-- <div mat-dialog-title class="mt-0 mb-0 pb-2 pt-0" style="line-height: 22px;
+font-size: 18px; border-bottom: 1px solid #e8e8e8; background: #eee;">
+    <div><img [src]="data.entidad_logo_url" class="logo-entidad"> {{data.entidad_nombre}} @if (data.entidad_nombre != data.entidad_siglas) { ({{data.entidad_siglas}}) }</div>
+    <div>{{data.nro}} - <b>{{data.cargo}}</b></div>
+</div> -->
+<!-- <h2 mat-dialog-title>{{data.cargo}}</h2> -->
+<mat-dialog-actions align="end" class="actions-info">
+    <button mat-button mat-dialog-close>Cerrar ventana</button>
+</mat-dialog-actions>
+<mat-dialog-content class="mat-typography" style="height: 100vh; max-height: 100vh;">
+    <iframe [src]="url_info" style="width: 100%;
+    height:85vh;" frameborder="0" border="0" cellspacing="0"></iframe>
+</mat-dialog-content>
+

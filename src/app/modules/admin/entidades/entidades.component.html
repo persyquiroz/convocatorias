@@ -1,0 +1,48 @@
+<div class="card-titulo p-3">
+    <h4 class="mb-0">Entidades</h4>
+    <p class="m-0">Listado de entidades</p>
+</div>
+<div class="p-3">
+    <mat-progress-bar mode="indeterminate" *ngIf="!cargado"></mat-progress-bar>
+    <div class="table-responsive">
+        <table class="basic table-bordered table-color" width="100%">
+            <thead>
+                <tr class="bg-eee">
+                    <th [width]="25">#</th>
+                    <th [width]="50">Logo</th>
+                    <th>Nombre</th>
+                    <th>Siglas</th>
+                    <th>Lugar</th>
+                </tr>
+            </thead>
+            <tbody>
+            @for (p of entidades$ | async; track $index) {
+                <tr class="tr_color_yellow">
+                    <td align="center">{{$index+1}}</td>
+                    <td align="center">
+                        @defer(){
+                        <img [src]="p.logo_url" class="logo-entidad">
+                        } @placeholder {
+                        <img src="logo-entidad.png" class="logo-entidad">
+                        }
+                    </td>
+                    <td>{{p.nombre}}</td>
+                    <td>{{p.siglas}}</td>
+                    <td>{{p.lugar}}</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="pagination$ | async as pagination">
+        <mat-paginator 
+              [length]="pagination.total"
+              [pageSize]="pagination.page_size"
+              pageIndex="{{pagination.current_page-1}}"
+              [pageSizeOptions]="[2, 4, 10, 25, 100, 500, 1000]"
+              (page)="changePage($event)"
+              showFirstLastButtons
+              aria-label="Select page">
+    </mat-paginator>
+    </div>
+</div>

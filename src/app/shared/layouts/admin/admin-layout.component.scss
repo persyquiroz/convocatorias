@@ -1,0 +1,32 @@
+.example-spacer {
+    flex: 1 1 auto;
+}
+
+.toolbar{
+    background: #005cbb;
+    color: white;
+}
+
+.toolbar mat-icon{
+    color: white;
+}
+
+.mat-toolbar {
+    height: 45px; /* Cambia este valor a la altura que desees */
+}
+
+/* app.component.scss */
+.sidenav-container {
+    height: 100vh;
+}
+
+.sidenav {
+  width: 250px;
+  border-radius: 0px;
+  border-right: 1px solid #eee;
+}
+
+// .content {
+//   padding: 16px;
+// }
+

@@ -1,1 +1,0 @@
-import{Vb as o,Wb as a,pc as r,ua as n,uc as i}from"./chunk-XIX3ZHYF.js";var l=(()=>{class e{static \u0275fac=function(t){return new(t||e)};static \u0275cmp=n({type:e,selectors:[["app-lugares"]],standalone:!0,features:[i],decls:2,vars:0,template:function(t,p){t&1&&(o(0,"p"),r(1,"lugares works!"),a())}})}return e})();export{l as LugaresComponent};
